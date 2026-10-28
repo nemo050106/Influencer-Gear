@@ -2,15 +2,26 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { FiMenu, FiX } from "react-icons/fi";
 import { authClient } from "@/lib/auth-client";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Get session data from Better Auth cleanly
   const { data: session } = authClient.useSession();
+
+  const handleSignOut = async () => {
+    setIsMenuOpen(false);
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => router.push("/login"),
+      },
+    });
+  };
 
   // Helper for active link styles with subtle background pill effect
   const getLinkStyle = (path: string) =>
@@ -42,8 +53,8 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* RIGHT: Desktop User Info / Auth Button */}
-        <div className="hidden md:flex items-center space-x-4">
+        {/* RIGHT: Desktop User Info / Auth Buttons */}
+        <div className="hidden md:flex items-center space-x-3">
           {session ? (
             <div className="flex items-center gap-3 bg-gray-50/80 border border-gray-200/60 rounded-full pl-4 pr-2 py-1.5 shadow-xs">
               <div className="flex flex-col text-right">
@@ -55,19 +66,27 @@ export default function Navbar() {
                 </span>
               </div>
               <button
-                onClick={() => authClient.signOut()}
+                onClick={handleSignOut}
                 className="rounded-full bg-white border border-gray-200 px-3.5 py-1 text-xs font-medium text-gray-700 hover:bg-gray-100 transition shadow-xs"
               >
                 Sign Out
               </button>
             </div>
           ) : (
-            <Link
-              href="/login"
-              className="rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-5 py-2 text-sm font-medium text-white shadow-md shadow-indigo-200 hover:from-indigo-700 hover:to-violet-700 transition"
-            >
-              Sign In
-            </Link>
+            <>
+              <Link
+                href="/login"
+                className="rounded-xl border border-gray-200 bg-white px-5 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/register"
+                className="rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-5 py-2 text-sm font-medium text-white shadow-md shadow-indigo-200 hover:from-indigo-700 hover:to-violet-700 transition"
+              >
+                Register
+              </Link>
+            </>
           )}
         </div>
 
@@ -76,14 +95,9 @@ export default function Navbar() {
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="md:hidden rounded-lg p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition"
           aria-label="Toggle navigation menu"
+          aria-expanded={isMenuOpen}
         >
-          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            {isMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
+          {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
         </button>
       </nav>
 
@@ -117,23 +131,29 @@ export default function Navbar() {
                   </p>
                 </div>
                 <button
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    authClient.signOut();
-                  }}
+                  onClick={handleSignOut}
                   className="w-full rounded-xl bg-gray-100 py-2.5 text-xs font-medium text-gray-700 hover:bg-gray-200 transition"
                 >
                   Sign Out
                 </button>
               </div>
             ) : (
-              <Link
-                href="/login"
-                className="block text-center rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 py-2.5 text-sm font-medium text-white shadow-md hover:from-indigo-700 hover:to-violet-700 transition"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Sign In
-              </Link>
+              <div className="flex flex-col space-y-3">
+                <Link
+                  href="/login"
+                  className="block text-center rounded-xl border border-gray-200 bg-white py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/register"
+                  className="block text-center rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 py-2.5 text-sm font-medium text-white shadow-md hover:from-indigo-700 hover:to-violet-700 transition"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Register
+                </Link>
+              </div>
             )}
           </div>
         </div>
