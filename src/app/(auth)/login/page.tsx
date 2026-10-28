@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import InputField from "@/ui/InputField";
 import Button from "@/ui/Button";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 
 
@@ -12,12 +14,15 @@ export default function LoginPage() {
         email: "",
         password: "",
     });
+    const [loginError, setLoginError] = useState("");
+
 
     // Generic input change handler (DRY)
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
+    const router = useRouter()
     const fields = [
         {
             label: "Email Address",
@@ -33,12 +38,19 @@ export default function LoginPage() {
         },
     ];
 
-    const loginButton = (e: React.FormEvent) => {
+    const loginButton = async (e: React.FormEvent) => {
         e.preventDefault();
         const email = formData.email
         const password = formData.password
 
-        console.log(email, password)
+        const { data, error } = await authClient.signIn.email(
+            {
+                email: email, // required, The email address of the user.
+                password: password,
+            })
+        if (data) {
+            router.push('/')
+        }
     };
 
     return (
@@ -71,6 +83,7 @@ export default function LoginPage() {
                             placeholder={field.placeholder}
                             value={formData[field.name as keyof typeof formData]}
                             onChange={handleChange}
+                            error={field.name === "password" ? loginError : undefined}
                         />
                     ))}
 

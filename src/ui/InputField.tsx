@@ -1,5 +1,7 @@
 
 import { InputFieldProps } from "@/lib/types";
+import { useState } from "react";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 
 
@@ -12,13 +14,17 @@ export default function InputField({
     error,
     onChange,
 }: InputFieldProps) {
+    const [showPassword, setShowPassword] = useState(false);
+    const isPassword = type === "password";
+
+    const toggle = () => setShowPassword((prev) => !prev);
     return (
-        <div>
+        <div className="relative">
             <label className="block text-xs font-semibold uppercase tracking-wider text-gray-600 mb-1.5">
                 {label}
             </label>
             <input
-                type={type}
+                type={isPassword && showPassword ? "text" : type}
                 name={name}
                 placeholder={placeholder}
                 value={value}
@@ -28,6 +34,23 @@ export default function InputField({
                     : "border-gray-200 bg-gray-50/50 focus:border-indigo-500 focus:bg-white focus:ring-indigo-500/10"
                     }`}
             />
+            {isPassword && (
+                <span
+                    role="button"
+                    tabIndex={0}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    onClick={toggle}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            toggle();
+                        }
+                    }}
+                    className="absolute inset-y-0 right-3 top-5 z-10 flex cursor-pointer items-center text-gray-500 hover:text-gray-700"
+                >
+                    {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                </span>
+            )}
             {error && (
                 <p className="mt-1 text-xs font-medium text-red-500">{error}</p>
             )}

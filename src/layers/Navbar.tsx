@@ -3,14 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-// import { authClient } from "@/lib/auth-client"; 
+import { authClient } from "@/lib/auth-client";
 
 export default function Navbar() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Get session data from Better Auth cleanly
-//   const { data: session } = authClient.useSession();
+  const { data: session } = authClient.useSession();
 
   // Helper for active link styles with subtle background pill effect
   const getLinkStyle = (path: string) =>
@@ -21,7 +21,7 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/80 backdrop-blur-md">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 py-3.5">
-        
+
         {/* LEFT: Logo with Icon Badge */}
         <Link href="/" className="flex items-center gap-2.5 group">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white shadow-md shadow-indigo-200 group-hover:scale-105 transition">
@@ -44,7 +44,7 @@ export default function Navbar() {
 
         {/* RIGHT: Desktop User Info / Auth Button */}
         <div className="hidden md:flex items-center space-x-4">
-          {/* {session ? (
+          {session ? (
             <div className="flex items-center gap-3 bg-gray-50/80 border border-gray-200/60 rounded-full pl-4 pr-2 py-1.5 shadow-xs">
               <div className="flex flex-col text-right">
                 <span className="text-xs font-semibold text-gray-900">
@@ -68,7 +68,7 @@ export default function Navbar() {
             >
               Sign In
             </Link>
-          )} */}
+          )}
         </div>
 
         {/* MOBILE: Hamburger Button */}
@@ -106,7 +106,7 @@ export default function Navbar() {
           </Link>
 
           <div className="border-t border-gray-100 pt-4 mt-2">
-            {/* {session ? (
+            {session ? (
               <div className="flex flex-col space-y-3">
                 <div className="bg-gray-50 p-3.5 rounded-xl border border-gray-200/60">
                   <p className="text-xs font-semibold text-gray-900">
@@ -134,7 +134,7 @@ export default function Navbar() {
               >
                 Sign In
               </Link>
-            )} */}
+            )}
           </div>
         </div>
       )}
