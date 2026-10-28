@@ -28,6 +28,10 @@ export default function Navbar() {
     pathname === path
       ? "text-indigo-600 font-semibold bg-indigo-50 px-4 py-2 rounded-lg transition"
       : "text-gray-600 hover:text-indigo-600 hover:bg-gray-50 px-4 py-2 rounded-lg transition-colors";
+  if
+    (pathname.includes('dashboard')) {
+    return null
+  }
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/80 backdrop-blur-md">

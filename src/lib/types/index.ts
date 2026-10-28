@@ -13,11 +13,22 @@ export interface ButtonProps {
 }
 
 export interface InputFieldProps {
-    label: string;
-    type: string;
-    name: string;
-    placeholder: string;
-    value: string;
-    error?: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  label: string;
+  type: string;
+  name: string;
+  placeholder: string;
+  value: string;
+  error?: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export interface UserProps {
+  createdAt: object
+  email: string
+  emailVerified: boolean
+  id: string
+  name: string
+  role: string
+  updatedAt: object
+
 }
