@@ -5,6 +5,8 @@ import Link from "next/link";
 import InputField from "@/ui/InputField";
 import Button from "@/ui/Button";
 import { registrationSchema } from "@/lib/validation";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
     const [formData, setFormData] = useState({
@@ -13,11 +15,13 @@ export default function RegisterPage() {
         password: "",
         confirmPassword: "",
     });
+    const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
+    const router = useRouter()
 
     const fields = [
         { label: "Full Name", type: "text", name: "name", placeholder: "Alex Rivera" },
@@ -26,7 +30,7 @@ export default function RegisterPage() {
         { label: "Confirm Password", type: "password", name: "confirmPassword", placeholder: "••••••••" },
     ];
 
-    const RegisterButton = (e: React.FormEvent) => {
+    const RegisterButton = async (e: React.FormEvent) => {
         e.preventDefault();
 
         // 1. Run Zod validation against the form state
@@ -36,21 +40,43 @@ export default function RegisterPage() {
         if (!result.success) {
             const formattedErrors: Record<string, string> = {};
 
-            // Extract every error issue produced by Zod
             result.error.issues.forEach((issue) => {
-                // issue.path[0] gives the field name, e.g., "email" or "password"
                 const fieldName = issue.path[0] as string;
                 formattedErrors[fieldName] = issue.message;
             });
 
-            // 3. Store errors in state so UI updates
             setErrors(formattedErrors);
-            return; // Stop form execution
+            return;
         }
 
-        // 4. Success! Clear errors and proceed
+        // 3. Clear errors and set loading state
         setErrors({});
-        // console.log("Valid data ready to send:", result.data);
+        setIsLoading(true);
+
+        // 4. Call Better Auth sign-up endpoint
+        const { data, error } = await authClient.signUp.email(
+            {
+                email: result.data.email,
+                password: result.data.password,
+                name: result.data.name,
+            },
+            // {
+            //     onRequest: () => {
+            //         setIsLoading(true);
+            //     },
+            //     onSuccess: () => {
+            //         setIsLoading(false);
+            //         router.push("/dashboard");
+            //     },
+            //     onError: (ctx) => {
+            //         setIsLoading(false);
+            //         alert(ctx.error.message);
+            //     },
+            // }
+        );
+        if(data){
+            router.push('/login')
+        }
     };
 
     return (
