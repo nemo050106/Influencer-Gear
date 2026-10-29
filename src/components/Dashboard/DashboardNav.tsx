@@ -37,7 +37,7 @@ export default function DashboardNav() {
       
       {/* Brand Logo & Name */}
       <div className="flex items-center gap-3">
-        <Link href="/dashboard" className="flex items-center gap-2.5 group">
+        <Link href="/" className="flex items-center gap-2.5 group">
           <div className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white shadow-md shadow-indigo-200 transition group-hover:scale-105">
             <span className="text-xs font-bold tracking-wider">IG</span>
           </div>

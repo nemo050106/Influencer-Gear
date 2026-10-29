@@ -10,14 +10,14 @@ type Role = 'admin' | 'user'
 
 const navigation: Record<Role, { title: string; href: string }[]> = {
   admin: [
-    { title: 'Dashboard', href: '/admin' },
-    { title: 'Products', href: '/admin/products' },
+    // { title: 'Home', href: '/admin' },
+    // { title: 'Products', href: '/admin/products' },
     { title: 'Orders', href: '/admin/orders' },
     { title: 'Customers', href: '/admin/customers' },
   ],
   user: [
-    { title: 'Dashboard', href: '/dashboard' },
-    { title: 'My Orders', href: '/my-orders' },
+    { title: 'Home', href: '/user' },
+    { title: 'My Orders', href: '/user/my-orders' },
   ],
 }
 
@@ -34,9 +34,9 @@ export default function DashboardAside() {
   // The menu content is shared by desktop and mobile
   const menu = (
     <div className="p-6">
-      <p className="mb-3 px-3 text-xs font-semibold text-gray-400">
+      {/* <p className="mb-3 px-3 text-xs font-semibold text-gray-400">
         {userRole === 'admin' ? 'Admin Menu' : 'User Menu'}
-      </p>
+      </p> */}
 
       <nav className="flex flex-col gap-1">
         {navLinks.map((link) => {
