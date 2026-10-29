@@ -1,18 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { FiMenu, FiX } from "react-icons/fi";
 import { authClient } from "@/lib/auth-client";
+import { getUser } from "@/lib/getUser";
+import { UserProps } from "@/lib/types";
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState<UserProps | null>(null)
 
   // Get session data from Better Auth cleanly
-  const { data: session } = authClient.useSession();
+  // const { data: session } = authClient.useSession();
+  // const user = getUser()
+  // console.log(user)
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const userData = await getUser()
+      setUser(userData as UserProps)
+
+    }
+    fetchUserData()
+
+  }, [])
+
 
   const handleSignOut = async () => {
     setIsMenuOpen(false);
@@ -59,14 +75,14 @@ export default function Navbar() {
 
         {/* RIGHT: Desktop User Info / Auth Buttons */}
         <div className="hidden md:flex items-center space-x-3">
-          {session ? (
+          {user ? (
             <div className="flex items-center gap-3 bg-gray-50/80 border border-gray-200/60 rounded-full pl-4 pr-2 py-1.5 shadow-xs">
               <div className="flex flex-col text-right">
                 <span className="text-xs font-semibold text-gray-900">
-                  {session.user.name}
+                  {user?.name}
                 </span>
                 <span className="text-[10px] text-gray-500 truncate max-w-[130px]">
-                  {session.user.email}
+                  {user?.email}
                 </span>
               </div>
               <button
@@ -124,14 +140,14 @@ export default function Navbar() {
           </Link>
 
           <div className="border-t border-gray-100 pt-4 mt-2">
-            {session ? (
+            {user ? (
               <div className="flex flex-col space-y-3">
                 <div className="bg-gray-50 p-3.5 rounded-xl border border-gray-200/60">
                   <p className="text-xs font-semibold text-gray-900">
-                    {session.user.name}
+                    {user.name}
                   </p>
                   <p className="text-[11px] text-gray-500 mt-0.5">
-                    {session.user.email}
+                    {user.email}
                   </p>
                 </div>
                 <button
