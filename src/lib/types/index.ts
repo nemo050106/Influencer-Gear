@@ -23,12 +23,13 @@ export interface InputFieldProps {
 }
 
 export interface UserProps {
-  createdAt: object
+  createdAt: Date
   email: string
   emailVerified: boolean
   id: string
   name: string
   role: string
-  updatedAt: object
+  updatedAt: Date
+  image?: string | null | undefined;
 
 }

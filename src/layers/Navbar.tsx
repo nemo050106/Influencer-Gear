@@ -29,7 +29,7 @@ export default function Navbar() {
       ? "text-indigo-600 font-semibold bg-indigo-50 px-4 py-2 rounded-lg transition"
       : "text-gray-600 hover:text-indigo-600 hover:bg-gray-50 px-4 py-2 rounded-lg transition-colors";
   if
-    (pathname.includes('dashboard')) {
+    (pathname.includes('dashboard') || pathname.includes('admin') || pathname.includes('user')) {
     return null
   }
 

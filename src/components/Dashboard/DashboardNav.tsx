@@ -4,9 +4,22 @@ import React from "react";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { UserProps } from "@/lib/types";
 
 export default function DashboardNav() {
   const router = useRouter();
+  const { data: session } = authClient.useSession();
+  const user = session?.user as UserProps | undefined;
+
+  // Helper function to get initials from name (e.g., "Alex Rivera" -> "AR")
+  const getInitials = (name?: string) => {
+    if (!name) return "User"; // 
+    const parts = name.trim().split(" ");
+    if (parts.length >= 2) {
+      return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
+  };
 
   // Handle user sign out
   const handleSignOut = async () => {
@@ -40,9 +53,11 @@ export default function DashboardNav() {
         {/* User Profile Quick Badge */}
         <div className="hidden sm:flex items-center gap-2.5 rounded-full border border-gray-100 bg-gray-50/50 py-1.5 pl-2 pr-4 shadow-sm">
           <div className="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 text-xs font-semibold">
-            AG
+            {getInitials(user?.name)} {/* 👈 Dynamic Initials */}
           </div>
-          <span className="text-xs font-medium text-gray-700">Alex Rivera</span>
+          <span className="text-xs font-medium text-gray-700">
+            {user?.name || "Loading..."}
+          </span>
         </div>
 
         {/* Sign Out Button */}
