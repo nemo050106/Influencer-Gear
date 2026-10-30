@@ -5,6 +5,9 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { authClient } from '@/lib/auth-client'
 import Button from '@/ui/Button'
+import { Menu, X } from 'lucide'
+import { BiMenu } from 'react-icons/bi'
+import { RxCross1 } from 'react-icons/rx'
 
 type Role = 'admin' | 'user'
 
@@ -31,7 +34,6 @@ export default function DashboardAside() {
   // const navLinks = navigation.admin
   // const navLinks = navigation.admin
 
-  // The menu content is shared by desktop and mobile
   const menu = (
     <div className="p-6">
       {/* <p className="mb-3 px-3 text-xs font-semibold text-gray-400">
@@ -47,9 +49,9 @@ export default function DashboardAside() {
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)} // close the menu after clicking
-              className={`rounded-xl px-3.5 py-2.5 text-sm font-medium transition ${isActive
-                  ? 'bg-indigo-50 text-indigo-600'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              className={`rounded-xl px-3.5 py-2.5 text-sm border  font-medium transition ${isActive
+                ? 'bg-indigo-50 text-indigo-600'
+                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                 }`}
             >
               {link.title}
@@ -62,13 +64,13 @@ export default function DashboardAside() {
 
   return (
     <>
-      {/* Mobile: top bar with a menu button (hidden on desktop) */}
+      {/* Mobile */}
       <div className="flex items-center gap-3 border-b border-gray-100 bg-white px-4 py-3 md:hidden">
         <Button
           onClick={() => setOpen(true)}
-          className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700"
+          className="rounded-lg border border-gray-200 flex items-center  text-sm font-medium text-gray-700"
         >
-          ☰ Menu
+          <BiMenu size={13} />    
         </Button>
       </div>
 
@@ -90,10 +92,11 @@ export default function DashboardAside() {
             }`}
         >
           <Button onClick={() => setOpen(false)}
-            className="absolute right-3 top-3 px-2 text-xl text-gray-500"
+            className="absolute right-3 top-3  text-gray-500"
             aria-label="Close menu"
           >
-            ✕
+          <RxCross1 /> 
+
           </Button>
           {menu}
         </aside>
