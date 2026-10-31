@@ -29,7 +29,7 @@ export default async function Products({
         {/* Header Section */}
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur-sm px-3 py-1 text-xs font-medium text-purple-600 ring-1 ring-inset ring-purple-500/10 shadow-sm">
-            ✨ Explore Gear Catalog
+             Explore Gear Catalog
           </div>
           <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Featured <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Products</span>

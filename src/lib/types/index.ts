@@ -42,6 +42,8 @@ export interface Product {
   price: number
   stock: number
   rating: number
+  image: string
+  isActive: boolean
   
 }
 
@@ -49,3 +51,12 @@ export type PaginatedProducts = {
   products: Product[];
   total: number;
 };
+
+export interface UpdateProductPayload {
+    name: string
+    price: number
+    stock: number
+    category: string
+    image?: string
+    isActive?: boolean
+}
