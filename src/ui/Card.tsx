@@ -2,12 +2,14 @@
 import { Product } from '@/lib/types'
 import { FaStar } from 'react-icons/fa'
 import Button from './Button'
+import { useRouter } from 'next/navigation'
 
 export default function Card({ product }: { product: Product }) {
+  const router = useRouter()
   const inStock = product.stock > 0
-  const goDetails = () => {
-    console.log(999)
-  }
+ const goDetails = () => {
+  router.push(`/details/${product._id}`)
+}
 
   return (
     <div className="group relative flex flex-col justify-between rounded-2xl bg-white/90 p-5 shadow-sm ring-1 ring-gray-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:ring-purple-500/20 backdrop-blur-sm">

@@ -51,7 +51,7 @@ export default async function Products({
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            basePath="/products"
+            basePath="/"
           />
         </div>
       </div>
