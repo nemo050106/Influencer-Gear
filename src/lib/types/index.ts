@@ -33,3 +33,19 @@ export interface UserProps {
   image?: string | null | undefined;
 
 }
+
+
+export interface Product {
+  _id: string
+  name: string
+  category: string
+  price: number
+  stock: number
+  rating: number
+  
+}
+
+export type PaginatedProducts = {
+  products: Product[];
+  total: number;
+};

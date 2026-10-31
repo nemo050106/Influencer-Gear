@@ -13,8 +13,8 @@ type Role = 'admin' | 'user'
 
 const navigation: Record<Role, { title: string; href: string }[]> = {
   admin: [
-    // { title: 'Home', href: '/admin' },
-    // { title: 'Products', href: '/admin/products' },
+    { title: 'Home', href: '/admin' },
+    { title: 'Products', href: '/admin/products' },
     { title: 'Orders', href: '/admin/orders' },
     { title: 'Customers', href: '/admin/customers' },
   ],

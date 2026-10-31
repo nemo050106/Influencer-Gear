@@ -1,7 +1,10 @@
-import React from 'react'
 
-export default function AdminProducts() {
+
+export default async function AdminProducts() {
+  // read ?page=2 from the URL (defaults to page 1)
   return (
-    <div>AdminProducts</div>
-  )
+  <div>
+
+  </div>
+ )
 }
