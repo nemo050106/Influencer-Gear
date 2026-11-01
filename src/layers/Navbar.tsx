@@ -29,7 +29,7 @@ export default function Navbar() {
 
   }, [])
 
-  console.log(user?.role, 'from navbar')
+  // console.log(user?.role, 'from navbar')
 
 
   const handleSignOut = async () => {

@@ -14,8 +14,7 @@ type Role = 'admin' | 'user'
 const navigation: Record<Role, { title: string; href: string }[]> = {
   admin: [
     { title: 'Home', href: '/admin' },
-    { title: 'Products', href: '/admin/products' },
-    { title: 'Orders', href: '/admin/orders' },
+
     { title: 'Customers', href: '/admin/customers' },
   ],
   user: [
@@ -70,7 +69,7 @@ export default function DashboardAside() {
           onClick={() => setOpen(true)}
           className="rounded-lg border border-gray-200 flex items-center  text-sm font-medium text-gray-700"
         >
-          <BiMenu size={13} />    
+          <BiMenu size={13} />
         </Button>
       </div>
 
@@ -95,7 +94,7 @@ export default function DashboardAside() {
             className="absolute right-3 top-3  text-gray-500"
             aria-label="Close menu"
           >
-          <RxCross1 /> 
+            <RxCross1 />
 
           </Button>
           {menu}
