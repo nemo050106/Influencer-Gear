@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { getProductsByid } from '@/lib/getProductsById'
 import DetailsClient from '@/components/DetailsClient'
 import EditProductButton from '@/components/EditProduct'
+import { getUser } from '@/lib/getUser'
 
 export default async function ProductDetails({
     params,
@@ -24,6 +25,8 @@ export default async function ProductDetails({
     if (!product) notFound()
 
     const inStock = product.stock > 0
+    // const user = await getUser()
+    // console.log(user, 'user from details page')
 
     return (
         <div className="min-h-screen bg-[#c5b9b91d] from-indigo-100/40 via-gray-100/60 to-slate-200/50 px-4 py-12 sm:px-6 lg:px-8">
@@ -80,11 +83,10 @@ export default async function ProductDetails({
                                     </span>
 
                                     <div
-                                        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ring-1 ring-inset ${
-                                            inStock
+                                        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ring-1 ring-inset ${inStock
                                                 ? 'bg-emerald-50 text-emerald-700 ring-emerald-600/20'
                                                 : 'bg-rose-50 text-rose-700 ring-rose-600/20'
-                                        }`}
+                                            }`}
                                     >
                                         {inStock ? (
                                             <FaCheckCircle className="text-emerald-500" />
@@ -122,8 +124,7 @@ export default async function ProductDetails({
                             </div>
 
                             {/* Buy action */}
-                            <DetailsClient inStock={inStock} />
-                        </div>
+                            <DetailsClient inStock={inStock} productId={String(product._id)} />                        </div>
                     </div>
                 </div>
             </div>

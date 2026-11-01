@@ -29,6 +29,8 @@ export default function Navbar() {
 
   }, [])
 
+  console.log(user?.role, 'from navbar')
+
 
   const handleSignOut = async () => {
     setIsMenuOpen(false);
@@ -82,7 +84,8 @@ export default function Navbar() {
                   {user?.name}
                 </span>
                 <span className="text-[10px] text-gray-500 truncate max-w-[130px]">
-                  {user?.email}
+                  {/* {user?.email}  */}
+                   {user?.role}
                 </span>
               </div>
               <button

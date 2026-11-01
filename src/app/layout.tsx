@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Toaster } from 'sonner'
+
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/layers/Navbar";
@@ -28,6 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Navbar></Navbar>
         <main>
           {children}
+          <Toaster position="top-right" richColors closeButton />
 
         </main>
       </body>
