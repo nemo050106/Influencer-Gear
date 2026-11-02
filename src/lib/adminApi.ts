@@ -9,6 +9,15 @@ export interface AdminStats {
     customers: number
 }
 
+
+export interface Customer {
+    email: string
+    orders: number
+    pending: number
+    spent: number
+    lastOrderAt: string
+}
+
 export const getAdminStats = () =>
     apiRequest<AdminStats>('/api/admin/stats', { cache: 'no-store' })
 
@@ -17,3 +26,6 @@ export const getAdminOrders = (limit = 5) =>
 
 export const markOrderShipped = (id: string) =>
     apiRequest<Order>(`/api/orders/${id}/ship`, { method: 'PATCH' })
+
+export const getAdminCustomers = () =>
+    apiRequest<Customer[]>('/api/admin/customers', { cache: 'no-store' })

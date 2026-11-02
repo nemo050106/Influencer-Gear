@@ -1,3 +1,4 @@
+
 import { authClient } from "./auth-client";
 
 export const getUser = async () => {
@@ -7,3 +8,5 @@ export const getUser = async () => {
     // 2. Return the user object (or null if not logged in)
     return session?.user ?? null;
 };
+
+

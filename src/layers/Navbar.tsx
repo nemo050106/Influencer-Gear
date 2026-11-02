@@ -83,7 +83,7 @@ export default function Navbar() {
                 <span className="text-xs font-semibold text-gray-900">
                   {user?.name}
                 </span>
-                <span className="text-[10px] text-gray-500 truncate max-w-[130px]">
+                <span className="text-[10px] text-gray-500 truncate max-w-[130px] uppercase text-center">
                   {/* {user?.email}  */}
                    {user?.role}
                 </span>

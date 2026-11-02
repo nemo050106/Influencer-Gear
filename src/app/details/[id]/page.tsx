@@ -1,10 +1,11 @@
 import { notFound } from 'next/navigation'
-import { FaStar, FaBoxOpen, FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
+import { FaStar, FaBoxOpen, FaCheckCircle, FaTimesCircle, FaArrowAltCircleLeft } from 'react-icons/fa'
 import Link from 'next/link'
 import { getProductsByid } from '@/lib/getProductsById'
 import DetailsClient from '@/components/DetailsClient'
 import EditProductButton from '@/components/EditProduct'
-import { getUser } from '@/lib/getUser'
+import Image from 'next/image'
+import { getServerUser } from '@/lib/getUserServer'
 
 export default async function ProductDetails({
     params,
@@ -25,9 +26,10 @@ export default async function ProductDetails({
     if (!product) notFound()
 
     const inStock = product.stock > 0
-    // const user = await getUser()
-    // console.log(user, 'user from details page')
 
+    const user = await getServerUser()
+    const userRole = user?.role
+    console.log(product.image)
     return (
         <div className="min-h-screen bg-[#c5b9b91d] from-indigo-100/40 via-gray-100/60 to-slate-200/50 px-4 py-12 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-5xl space-y-6">
@@ -38,10 +40,13 @@ export default async function ProductDetails({
                         href="/"
                         className="inline-flex items-center gap-2 text-sm font-semibold text-purple-600 transition-colors hover:text-purple-500"
                     >
-                        <span>←</span> Back to products
+                        <span> <FaArrowAltCircleLeft /> </span> Back to products
                     </Link>
 
-                    <EditProductButton product={product} />
+                    {
+                        userRole === 'admin' ? <EditProductButton product={product} />
+                            : null
+                    }
                 </div>
 
                 {/* Product card */}
@@ -50,18 +55,18 @@ export default async function ProductDetails({
 
                         <div className="group relative aspect-square w-full overflow-hidden rounded-2xl bg-gradient-to-tr from-indigo-50 to-purple-50 ring-1 ring-gray-900/5">
                             {product.image ? (
-                                // eslint-disable-next-line @next/next/no-img-element
-                                <img
+                                <Image
                                     src={product.image}
                                     alt={product.name}
-                                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                    fill
+                                    unoptimized
+                                    sizes="(min-width: 768px) 50vw, 100vw"
+                                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                                 />
                             ) : (
                                 <div className="flex h-full flex-col items-center justify-center gap-3 text-purple-300">
                                     <FaBoxOpen className="text-6xl" />
-                                    <span className="text-xs font-medium text-gray-400">
-                                        No image available
-                                    </span>
+                                    <span className="text-xs font-medium text-gray-400">No image available</span>
                                 </div>
                             )}
 
@@ -84,8 +89,8 @@ export default async function ProductDetails({
 
                                     <div
                                         className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ring-1 ring-inset ${inStock
-                                                ? 'bg-emerald-50 text-emerald-700 ring-emerald-600/20'
-                                                : 'bg-rose-50 text-rose-700 ring-rose-600/20'
+                                            ? 'bg-emerald-50 text-emerald-700 ring-emerald-600/20'
+                                            : 'bg-rose-50 text-rose-700 ring-rose-600/20'
                                             }`}
                                     >
                                         {inStock ? (
@@ -124,7 +129,8 @@ export default async function ProductDetails({
                             </div>
 
                             {/* Buy action */}
-                            <DetailsClient inStock={inStock} productId={String(product._id)} />                        </div>
+                            <DetailsClient inStock={inStock} productId={String(product._id)} />
+                        </div>
                     </div>
                 </div>
             </div>
