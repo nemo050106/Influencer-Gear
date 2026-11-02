@@ -18,6 +18,12 @@ export interface Customer {
     lastOrderAt: string
 }
 
+
+export interface OrdersPage {
+    orders: Order[]
+    total: number
+}
+
 export const getAdminStats = () =>
     apiRequest<AdminStats>('/api/admin/stats', { cache: 'no-store' })
 
@@ -29,3 +35,7 @@ export const markOrderShipped = (id: string) =>
 
 export const getAdminCustomers = () =>
     apiRequest<Customer[]>('/api/admin/customers', { cache: 'no-store' })
+
+
+export const getAdminOrdersPage = (params: string) =>
+    apiRequest<OrdersPage>(`/api/admin/orders/list?${params}`, { cache: 'no-store' })

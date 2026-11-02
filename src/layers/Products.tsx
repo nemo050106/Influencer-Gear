@@ -1,10 +1,17 @@
 import React from 'react'
-
+import { redirect } from 'next/navigation'
+import { FaBoxOpen, FaShippingFast, FaShieldAlt, FaStar } from 'react-icons/fa'
 import { getPaginatedProducts } from '@/lib/getProducts'
 import Card from '@/ui/Card'
 import Pagination from '@/ui/Pagination'
 
-const LIMIT = 10 // products per page
+const LIMIT = 12 // 12 divides evenly into 1, 2, 3 and 4 columns
+
+const perks = [
+  { icon: FaShippingFast, title: 'Fast shipping', text: 'Orders are processed quickly' },
+  { icon: FaShieldAlt, title: 'Quality gear', text: 'Curated for modern creators' },
+  { icon: FaStar, title: 'Top rated', text: 'Reviewed and rated products' },
+]
 
 export default async function Products({
   searchParams,
@@ -14,46 +21,116 @@ export default async function Products({
   const { page } = await searchParams
   const currentPage = Math.max(1, Number(page) || 1)
 
-  // ask the backend for only this page's products
   const { products, total } = await getPaginatedProducts(currentPage, LIMIT)
   const totalPages = Math.ceil(total / LIMIT)
 
+  // page=999 on a 5-page catalog: send them to the last page instead of showing nothing
+  if (totalPages > 0 && currentPage > totalPages) {
+    redirect(`/?page=${totalPages}`)
+  }
+
+  const from = total === 0 ? 0 : (currentPage - 1) * LIMIT + 1
+  const to = Math.min(currentPage * LIMIT, total)
+
   return (
-    <div className="relative min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-100/40 via-gray-100/60 to-slate-200/50 py-12 px-4 sm:px-6 lg:px-8">
-      {/* Background ambient glow effect matching home hero */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 transform-gpu overflow-hidden blur-3xl" aria-hidden="true">
+    <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-100/40 via-gray-100/60 to-slate-200/50 px-4 py-12 sm:px-6 lg:px-8">
+
+      {/* Ambient glow */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 transform-gpu overflow-hidden blur-3xl"
+        aria-hidden="true"
+      >
         <div className="relative left-[calc(50%+11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-20 sm:left-[calc(50%+30rem)] sm:w-[72.1875rem]" />
       </div>
 
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Header Section */}
-        <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur-sm px-3 py-1 text-xs font-medium text-purple-600 ring-1 ring-inset ring-purple-500/10 shadow-sm">
-             Explore Gear Catalog
+      <div className="mx-auto max-w-7xl space-y-10">
+
+        {/* Hero */}
+        <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-600 to-indigo-600 px-6 py-10 text-white shadow-sm sm:px-10 sm:py-14">
+          <div className="absolute -right-12 -top-12 h-56 w-56 rounded-full bg-white/10" />
+          <div className="absolute -bottom-20 right-28 h-48 w-48 rounded-full bg-white/10" />
+
+          <div className="relative max-w-2xl space-y-4">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-medium backdrop-blur-sm ring-1 ring-inset ring-white/20">
+              ✨ Explore Gear Catalog
+            </div>
+            <h1 className="text-3xl font-bold tracking-tight sm:text-5xl">
+              Gear built for modern creators
+            </h1>
+            <p className="text-sm text-purple-100 sm:text-base">
+              Browse our curated selection of high-performance cameras, audio, lighting and more.
+            </p>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Featured <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Products</span>
-          </h1>
-          <p className="text-sm text-gray-600 max-w-xl">
-            Browse through our curated selection of high-performance gear designed for modern creators.
-          </p>
-        </div>
+        </section>
 
-        {/* Product Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((product) => (
-            <Card product={product} key={product._id} />
+        {/* Perks */}
+        <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {perks.map(({ icon: Icon, title, text }) => (
+            <div
+              key={title}
+              className="flex items-center gap-4 rounded-2xl bg-white/80 p-4 shadow-sm ring-1 ring-gray-900/5 backdrop-blur-sm"
+            >
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-purple-50 text-purple-600">
+                <Icon />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-900">{title}</p>
+                <p className="text-xs text-gray-500">{text}</p>
+              </div>
+            </div>
           ))}
-        </div>
+        </section>
 
-        {/* Pagination Controls */}
-        <div className="pt-6 flex justify-center">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            basePath="/"
-          />
-        </div>
+        {/* Section header */}
+        <section className="space-y-6">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+                Featured{' '}
+                <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                  Products
+                </span>
+              </h2>
+              <p className="mt-1 text-sm text-gray-500">
+                {total > 0
+                  ? `Showing ${from}–${to} of ${total} products`
+                  : 'No products to show yet'}
+              </p>
+            </div>
+
+            {totalPages > 1 && (
+              <span className="inline-flex w-fit items-center rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-purple-600 ring-1 ring-inset ring-purple-500/10 backdrop-blur-sm">
+                Page {currentPage} of {totalPages}
+              </span>
+            )}
+          </div>
+
+          {/* Grid */}
+          {products.length > 0 ? (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {products.map((product) => (
+                <Card product={product} key={product._id} />
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-3 rounded-3xl bg-white/80 py-20 text-center shadow-sm ring-1 ring-gray-900/5 backdrop-blur-sm">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-purple-50 text-3xl text-purple-300">
+                <FaBoxOpen />
+              </div>
+              <p className="text-base font-semibold text-gray-900">No products found</p>
+              <p className="max-w-xs text-sm text-gray-500">
+                Check back soon, new gear is added regularly.
+              </p>
+            </div>
+          )}
+        </section>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center pt-2">
+            <Pagination currentPage={currentPage} totalPages={totalPages} basePath="/" />
+          </div>
+        )}
       </div>
     </div>
   )

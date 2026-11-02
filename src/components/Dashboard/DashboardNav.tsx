@@ -58,6 +58,10 @@ export default function DashboardNav() {
           <span className="text-xs font-medium text-gray-700">
             {user?.name || "Loading..."}
           </span>
+          <span className="border border-r border-black"></span>
+          <span className="text-xs font-medium text-gray-700 uppercase">
+            {user?.role || "Loading..."}
+          </span>
         </div>
 
         {/* Sign Out Button */}
