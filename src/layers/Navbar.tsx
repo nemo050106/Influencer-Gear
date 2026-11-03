@@ -70,6 +70,9 @@ export default function Navbar() {
           <Link href="/" className={getLinkStyle("/")}>
             Home
           </Link>
+          <Link href="/products" className={getLinkStyle("/dashboard")}>
+            Products
+          </Link>
           <Link href="/dashboard" className={getLinkStyle("/dashboard")}>
             Dashboard
           </Link>
@@ -133,6 +136,13 @@ export default function Navbar() {
             onClick={() => setIsMenuOpen(false)}
           >
             Home
+          </Link>
+          <Link
+            href="/products"
+            className={getLinkStyle("/products")}
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Products
           </Link>
           <Link
             href="/dashboard"

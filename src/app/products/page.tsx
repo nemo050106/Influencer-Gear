@@ -5,8 +5,7 @@ import { getPaginatedProducts } from '@/lib/getProducts'
 import Card from '@/ui/Card'
 import Pagination from '@/ui/Pagination'
 
-const LIMIT = 12 // 12 divides evenly into 1, 2, 3 and 4 columns
-
+const LIMIT = 12 
 const perks = [
   { icon: FaShippingFast, title: 'Fast shipping', text: 'Orders are processed quickly' },
   { icon: FaShieldAlt, title: 'Quality gear', text: 'Curated for modern creators' },
@@ -52,7 +51,7 @@ export default async function Products({
 
           <div className="relative max-w-2xl space-y-4">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-medium backdrop-blur-sm ring-1 ring-inset ring-white/20">
-              ✨ Explore Gear Catalog
+               Explore Gear Catalog
             </div>
             <h1 className="text-3xl font-bold tracking-tight sm:text-5xl">
               Gear built for modern creators
@@ -128,7 +127,7 @@ export default async function Products({
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex justify-center pt-2">
-            <Pagination currentPage={currentPage} totalPages={totalPages} basePath="/" />
+            <Pagination currentPage={currentPage} totalPages={totalPages} basePath="/products" />
           </div>
         )}
       </div>

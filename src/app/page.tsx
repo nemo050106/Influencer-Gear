@@ -1,5 +1,6 @@
 import Hero from "@/layers/Hero";
-import Products from "@/layers/Products";
+import Products from "@/layers/FeatureProducts";
+import Footer from "@/layers/Footer";
 
 export default function Home({
   searchParams,
@@ -9,7 +10,8 @@ export default function Home({
   return (
     <div>
       <Hero />
-      <Products searchParams={searchParams} />
+      <Products />
+      <Footer />
     </div>
   );
 }
