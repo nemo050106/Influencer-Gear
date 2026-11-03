@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { FaInstagram, FaYoutube, FaTwitter, FaGithub, FaEnvelope } from 'react-icons/fa'
 
 const shopLinks = [
-  { href: '/', label: 'All products' },
+  { href: '/products', label: 'All products' },
   { href: '/my-orders', label: 'My orders' },
 ]
 
