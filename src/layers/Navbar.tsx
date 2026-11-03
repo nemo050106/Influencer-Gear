@@ -7,6 +7,7 @@ import { FiMenu, FiX } from "react-icons/fi";
 import { authClient } from "@/lib/auth-client";
 import { getUser } from "@/lib/getUser";
 import { UserProps } from "@/lib/types";
+import Button from "@/ui/Button";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -88,15 +89,16 @@ export default function Navbar() {
                 </span>
                 <span className="text-[10px] text-gray-500 truncate max-w-[130px] uppercase text-center">
                   {/* {user?.email}  */}
-                   {user?.role}
+                  {user?.role}
                 </span>
               </div>
-              <button
+              <Button
+                variant="secondary"
                 onClick={handleSignOut}
                 className="rounded-full bg-white border border-gray-200 px-3.5 py-1 text-xs font-medium text-gray-700 hover:bg-gray-100 transition shadow-xs"
               >
                 Sign Out
-              </button>
+              </Button>
             </div>
           ) : (
             <>
@@ -117,14 +119,14 @@ export default function Navbar() {
         </div>
 
         {/* MOBILE: Hamburger Button */}
-        <button
+        <Button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="md:hidden rounded-lg p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition"
           aria-label="Toggle navigation menu"
           aria-expanded={isMenuOpen}
         >
           {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-        </button>
+        </Button>
       </nav>
 
       {/* MOBILE: Dropdown Menu Drawer */}
@@ -163,12 +165,13 @@ export default function Navbar() {
                     {user.email}
                   </p>
                 </div>
-                <button
+                <Button
+                  variant="secondary"
                   onClick={handleSignOut}
                   className="w-full rounded-xl bg-gray-100 py-2.5 text-xs font-medium text-gray-700 hover:bg-gray-200 transition"
                 >
                   Sign Out
-                </button>
+                </Button>
               </div>
             ) : (
               <div className="flex flex-col space-y-3">

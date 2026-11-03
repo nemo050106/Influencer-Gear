@@ -81,7 +81,7 @@ export default function Card({ product }: { product: Product }) {
             <p className="text-2xl font-extrabold text-gray-900">${product.price}</p>
           </div>
 
-          <Button onClick={goDetails} type="button" variant="primary">
+          <Button onClick={goDetails} type="button" variant="primary" className='w-full'>
             Details
           </Button>
         </div>

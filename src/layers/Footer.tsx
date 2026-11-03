@@ -7,9 +7,9 @@ const shopLinks = [
 ]
 
 const accountLinks = [
-  { href: '/login', label: 'Sign in' },
-  { href: '/register', label: 'Create account' },
-  { href: '/dashboard', label: 'Dashboard' }, // change to your user dashboard route
+  { href: '/privacy-policy', label: 'Privacy Policy' },
+  { href: '/cookies', label: 'Cookies' },
+  { href: '/terms-conditions', label: 'Terms and Condition' }, // change to your user dashboard route
 ]
 
 const categories = ['Camera & Photo', 'Audio', 'Lighting', 'Computers & Streaming']
