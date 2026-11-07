@@ -1,4 +1,4 @@
-import { ButtonProps } from '@/lib';
+import { ButtonProps } from '@/lib/types';
 import React from 'react';
 
 // 1. Define variants object first

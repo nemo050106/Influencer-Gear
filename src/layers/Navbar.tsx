@@ -1,27 +1,61 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-// import { authClient } from "@/lib/auth-client"; 
+import { usePathname, useRouter } from "next/navigation";
+import { FiMenu, FiX } from "react-icons/fi";
+import { authClient } from "@/lib/auth-client";
+import { getUser } from "@/lib/getUser";
+import { UserProps } from "@/lib/types";
+import Button from "@/ui/Button";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState<UserProps | null>(null)
 
   // Get session data from Better Auth cleanly
-//   const { data: session } = authClient.useSession();
+  // const { data: session } = authClient.useSession();
+  // const user = getUser()
+  // console.log(user)
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const userData = await getUser()
+      setUser(userData as UserProps)
+
+    }
+    fetchUserData()
+
+  }, [])
+
+  // console.log(user?.role, 'from navbar')
+
+
+  const handleSignOut = async () => {
+    setIsMenuOpen(false);
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => router.push("/login"),
+      },
+    });
+  };
 
   // Helper for active link styles with subtle background pill effect
   const getLinkStyle = (path: string) =>
     pathname === path
       ? "text-indigo-600 font-semibold bg-indigo-50 px-4 py-2 rounded-lg transition"
       : "text-gray-600 hover:text-indigo-600 hover:bg-gray-50 px-4 py-2 rounded-lg transition-colors";
+  if
+    (pathname.includes('dashboard') || pathname.includes('admin') || pathname.includes('user')) {
+    return null
+  }
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/80 backdrop-blur-md">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 py-3.5">
-        
+
         {/* LEFT: Logo with Icon Badge */}
         <Link href="/" className="flex items-center gap-2.5 group">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white shadow-md shadow-indigo-200 group-hover:scale-105 transition">
@@ -37,54 +71,62 @@ export default function Navbar() {
           <Link href="/" className={getLinkStyle("/")}>
             Home
           </Link>
+          <Link href="/products" className={getLinkStyle("/dashboard")}>
+            Products
+          </Link>
           <Link href="/dashboard" className={getLinkStyle("/dashboard")}>
             Dashboard
           </Link>
         </div>
 
-        {/* RIGHT: Desktop User Info / Auth Button */}
-        <div className="hidden md:flex items-center space-x-4">
-          {/* {session ? (
+        {/* RIGHT: Desktop User Info / Auth Buttons */}
+        <div className="hidden md:flex items-center space-x-3">
+          {user ? (
             <div className="flex items-center gap-3 bg-gray-50/80 border border-gray-200/60 rounded-full pl-4 pr-2 py-1.5 shadow-xs">
               <div className="flex flex-col text-right">
                 <span className="text-xs font-semibold text-gray-900">
-                  {session.user.name}
+                  {user?.name}
                 </span>
-                <span className="text-[10px] text-gray-500 truncate max-w-[130px]">
-                  {session.user.email}
+                <span className="text-[10px] text-gray-500 truncate max-w-[130px] uppercase text-center">
+                  {/* {user?.email}  */}
+                  {user?.role}
                 </span>
               </div>
-              <button
-                onClick={() => authClient.signOut()}
+              <Button
+                variant="secondary"
+                onClick={handleSignOut}
                 className="rounded-full bg-white border border-gray-200 px-3.5 py-1 text-xs font-medium text-gray-700 hover:bg-gray-100 transition shadow-xs"
               >
                 Sign Out
-              </button>
+              </Button>
             </div>
           ) : (
-            <Link
-              href="/login"
-              className="rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-5 py-2 text-sm font-medium text-white shadow-md shadow-indigo-200 hover:from-indigo-700 hover:to-violet-700 transition"
-            >
-              Sign In
-            </Link>
-          )} */}
+            <>
+              <Link
+                href="/login"
+                className="rounded-xl border border-gray-200 bg-white px-5 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/register"
+                className="rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-5 py-2 text-sm font-medium text-white shadow-md shadow-indigo-200 hover:from-indigo-700 hover:to-violet-700 transition"
+              >
+                Register
+              </Link>
+            </>
+          )}
         </div>
 
         {/* MOBILE: Hamburger Button */}
-        <button
+        <Button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="md:hidden rounded-lg p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition"
           aria-label="Toggle navigation menu"
+          aria-expanded={isMenuOpen}
         >
-          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            {isMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
+          {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+        </Button>
       </nav>
 
       {/* MOBILE: Dropdown Menu Drawer */}
@@ -98,6 +140,13 @@ export default function Navbar() {
             Home
           </Link>
           <Link
+            href="/products"
+            className={getLinkStyle("/products")}
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Products
+          </Link>
+          <Link
             href="/dashboard"
             className={getLinkStyle("/dashboard")}
             onClick={() => setIsMenuOpen(false)}
@@ -106,35 +155,42 @@ export default function Navbar() {
           </Link>
 
           <div className="border-t border-gray-100 pt-4 mt-2">
-            {/* {session ? (
+            {user ? (
               <div className="flex flex-col space-y-3">
                 <div className="bg-gray-50 p-3.5 rounded-xl border border-gray-200/60">
                   <p className="text-xs font-semibold text-gray-900">
-                    {session.user.name}
+                    {user.name}
                   </p>
                   <p className="text-[11px] text-gray-500 mt-0.5">
-                    {session.user.email}
+                    {user.email}
                   </p>
                 </div>
-                <button
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    authClient.signOut();
-                  }}
+                <Button
+                  variant="secondary"
+                  onClick={handleSignOut}
                   className="w-full rounded-xl bg-gray-100 py-2.5 text-xs font-medium text-gray-700 hover:bg-gray-200 transition"
                 >
                   Sign Out
-                </button>
+                </Button>
               </div>
             ) : (
-              <Link
-                href="/login"
-                className="block text-center rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 py-2.5 text-sm font-medium text-white shadow-md hover:from-indigo-700 hover:to-violet-700 transition"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Sign In
-              </Link>
-            )} */}
+              <div className="flex flex-col space-y-3">
+                <Link
+                  href="/login"
+                  className="block text-center rounded-xl border border-gray-200 bg-white py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/register"
+                  className="block text-center rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 py-2.5 text-sm font-medium text-white shadow-md hover:from-indigo-700 hover:to-violet-700 transition"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Register
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}
